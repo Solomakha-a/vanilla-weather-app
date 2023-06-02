@@ -14,3 +14,19 @@ h1 {
     border: 1px solid #DFDFDF;
     border-radius: 2px;
 }
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+    color: rgba(39, 33, 66, .4);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-bottom: 5px;
+    margin: 0;
+    padding: 0;
+}

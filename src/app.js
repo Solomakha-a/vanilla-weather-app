@@ -1,7 +1,3 @@
-let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
-let city = "London";
-let apiUrl =`https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
-
 function formatDate(timestamp) {
     let date = new Date(timestamp);
     let hours = date.getHours();
@@ -38,5 +34,19 @@ function displayTemperature(response) {
     iconElement.setAttribute("alt", response.data.condition.description);
 }
 
+function search(city) {
+let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
+let apiUrl =`https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
 axios.get(apiUrl).then(displayTemperature);
+}
+function handleSubmit(event) {
+    event.preventDefault();
+    let cityInputElement = document.querySelector("#city-input");
+    search(cityInputElement.value);
+}
 
+search("London");
+
+
+let form = document.querySelector("#search-input");
+form.addEventListener("submit", handleSubmit);

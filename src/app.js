@@ -13,15 +13,26 @@ function formatDate(timestamp) {
     return `Last updated: ${day} ${hours}:${minutes}`;
 }
 
+function formatDay(timestamp) {
+let date = new Date(timestamp * 1000);
+
+let days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+let day = days[date.getDay()];
+
+return day;
+
+}
+
 function displayForecast(response) {
-    let forecast = response.daily;
+    let forecast = response.data.daily;
     let forecastElement = document.querySelector("#forecast");
 
     let forecastHTML = `<div class = "row">`;
     
-    forecast.forEach(function (forecastDay) {
+    forecast.forEach(function (forecastDay, index) {
+        if (index < 6) {
 forecastHTML = forecastHTML + `<div class="col-2">
-                <div class="weather-forecast-day">${forecastDay.time}</div>
+                <div class="weather-forecast-day">${formatDay(forecastDay.time)}</div>
                 <img
                   src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${forecastDay.condition.icon}.png"
                   alt=""
@@ -31,7 +42,7 @@ forecastHTML = forecastHTML + `<div class="col-2">
                   <span class="weather-forecast-temp-max"> ${Math.round(forecastDay.temperature.maximum)}° </span>
                   <span class="weather-forecast-temp-min"> ${Math.round(forecastDay.temperature.minimum)}° </span>
                 </div>
-            </div>`;
+            </div>`;}
     })
     
     forecastHTML = forecastHTML + `</div>`;
@@ -41,11 +52,13 @@ forecastHTML = forecastHTML + `<div class="col-2">
       
 }
 
-function getForecast(coordinates) {
-    let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
-    let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.lon}&lat=${coordinates.lat}&key=${apiKey}`;
-        axios.get(apiUrl).then(displayForecast);
-    }
+    function getForecast(coordinates) {
+  console.log(coordinates);
+  let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
+ let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.longitude}&lat=${coordinates.latitude}&key=${apiKey}`;
+  console.log(apiUrl);
+  axios.get(apiUrl).then(displayForecast);
+}
     
 
 
@@ -67,7 +80,7 @@ function displayTemperature(response) {
     iconElement.setAttribute ("src", `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`);
     iconElement.setAttribute("alt", response.data.condition.description);
   
-    
+    getForecast(response.data.coordinates);
 }
 
 function search(city) {

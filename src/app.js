@@ -52,15 +52,22 @@ forecastHTML = forecastHTML + `<div class="col-2">
       
 }
 
-    function getForecast(coordinates) {
-  console.log(coordinates);
-  let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
- let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.longitude}&lat=${coordinates.latitude}&key=${apiKey}`;
-  console.log(apiUrl);
-  axios.get(apiUrl).then(displayForecast);
+function getForecast(coordinates) {
+    console.log(coordinates);
+    let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
+    let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.longitude}&lat=${coordinates.latitude}&key=${apiKey}`;
+    console.log(apiUrl);
+    axios.get(apiUrl).then(displayForecast);
 }
     
-
+function showLocation(position) {
+  let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
+  //let lon = position.coords.longitude;
+  //let lat = position.coords.latitude;
+  let units = "metric";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.longitude}&lat=${coordinates.latitude}&key=${apiKey}`;
+  axios.get(apiUrl).then(displayTemperature);
+}
 
 function displayTemperature(response) {
     celsiusTemperature = response.data.temperature.current;
@@ -84,10 +91,11 @@ function displayTemperature(response) {
 }
 
 function search(city) {
-let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
-let apiUrl =`https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
-axios.get(apiUrl).then(displayTemperature);
+    let apiKey = "4o2b1et2ad8780b3de6b1ffa54355c3a";
+    let apiUrl =`https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(displayTemperature);
 }
+
 
 function handleSubmit(event) {
     event.preventDefault();
@@ -95,33 +103,24 @@ function handleSubmit(event) {
     search(cityInputElement.value);
 }
 
-function displayFarTemperature(event) {
-    event.preventDefault();
-    let farTemperature = (celsiusTemperature * 9) / 5 + 32;
-    let temperatureElement = document.querySelector("#temperature");
-    temperatureElement.innerHTML = Math.round(farTemperature);
-    celLinkElement.classList.remove("active");
-    farLinkElement.classList.add("active");
+
+function getCurrentPosition() {
+navigator.geolocation.getCurrentPosition(showLocation);
 }
 
-function displayCelTemperature(event) {
-    event.preventDefault();
-    let temperatureElement = document.querySelector("#temperature");
-    temperatureElement.innerHTML = Math.round(celsiusTemperature);
-    celLinkElement.classList.add("active");
-    farLinkElement.classList.remove("active");
-}
+
+
+let button = document.querySelector("#current-location");
+button.addEventListener("click", getCurrentPosition);
+
+
+
+
 
 
 let celsiusTemperature = null;
 
 let form = document.querySelector("#search-input");
 form.addEventListener("submit", handleSubmit);
-
-let farLinkElement = document.querySelector("#far-link");
-farLinkElement.addEventListener("click", displayFarTemperature);
-
-let celLinkElement = document.querySelector("#celsius-link");
-celLinkElement.addEventListener("click", displayCelTemperature);
 
 search("London");
